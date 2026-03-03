@@ -1,4 +1,5 @@
-from datetime import timezone, datetime
+import datetime
+from django.utils import timezone
 from django.db import models
 
 # Tabela Question
@@ -9,16 +10,18 @@ class Question(models.Model):
 
     # Método para retornar uma string quando pedirmos para imprimir um objeto da classe Question
     def __str__(self):
-        return f"\nId: # {self.id}\nText: {self.question_text}\nPublication Date: {self.pub_date}\n\n"
+         return f"\nId: # {self.id}\nText: {self.question_text}\nPublication Date: {self.pub_date}\n\n"
 
     # Método para mostrar as perguntas publicadas recentemente
     def was_published_recently(self):
-        # Retorna as linhas que têm um dia de vida
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+        # Retorna as linhas que têm no máximo um ano (52 semanas) mais duas semanas
+        return self.pub_date >= timezone.now() - datetime.timedelta(weeks=54)
+
 
 # Tabela Choice
 class Choice(models.Model):
     # Colunas da tabela Choice
+    # FOREIGN KEY(question) REFERENCES Question(id) --- SQL equivalente no CREATE TABLE
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)

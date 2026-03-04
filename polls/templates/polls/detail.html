@@ -1,0 +1,104 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ question.question_text }} | Polls</title>
+
+    <!-- Bootstrap 5 (CDN) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="">Polls</a>
+      </div>
+    </nav>
+
+    <main class="container py-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h1 class="h4 mb-1">{{ question.question_text }}</h1>
+                  {% if question.pub_date %}
+                    <div class="text-muted small">
+                      Published: {{ question.pub_date|date:"M j, Y, P" }}
+                    </div>
+                  {% endif %}
+                </div>
+
+                <a class="btn btn-outline-secondary btn-sm" href="">
+                  Back
+                </a>
+              </div>
+
+              <hr class="my-3" />
+
+              {% if error_message %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error_message }}
+                </div>
+              {% endif %}
+
+              <form action="{{ question.id }}" method="post">
+                {% csrf_token %}
+
+                <fieldset class="mb-3">
+                  <legend class="visually-hidden">Choices</legend>
+
+                  <div class="list-group">
+                    {% for choice in question.choice_set.all %}
+                      <label class="list-group-item d-flex gap-3 align-items-start">
+                        <input
+                          class="form-check-input mt-1"
+                          type="radio"
+                          name="choice"
+                          id="choice{{ forloop.counter }}"
+                          value="{{ choice.id }}"
+                          required
+                        />
+                        <div class="flex-grow-1">
+                          <div class="fw-semibold">{{ choice.choice_text }}</div>
+                        </div>
+                      </label>
+                    {% empty %}
+                      <div class="list-group-item">
+                        <span class="text-muted">No choices available for this question.</span>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </fieldset>
+
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="submit" class="btn btn-primary">Vote</button>
+                  <a class="btn btn-outline-primary" href="{{ question.id }}">
+                    View results
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <p class="text-center text-muted small mt-3 mb-0">
+            Tip: select an option and click <strong>Vote</strong>.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

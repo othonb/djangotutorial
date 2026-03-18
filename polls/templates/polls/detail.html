@@ -49,7 +49,7 @@
                 </div>
               {% endif %}
 
-              <form action="{{ question.id }}" method="post">
+              <form action="{% url 'polls:vote' question.id %}" method="post">
                 {% csrf_token %}
 
                 <fieldset class="mb-3">
@@ -80,7 +80,7 @@
 
                 <div class="d-flex flex-wrap gap-2">
                   <button type="submit" class="btn btn-primary">Vote</button>
-                  <a class="btn btn-outline-primary" href="{{ question.id }}">
+                  <a class="btn btn-outline-primary" href="{% url 'polls:results' question.id %}">
                     View results
                   </a>
                 </div>

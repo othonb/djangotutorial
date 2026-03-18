@@ -17,7 +17,6 @@ class Question(models.Model):
         # Retorna as linhas que têm no máximo um ano (52 semanas) mais duas semanas
         return self.pub_date >= timezone.now() - datetime.timedelta(weeks=54)
 
-
 # Tabela Choice
 class Choice(models.Model):
     # Colunas da tabela Choice

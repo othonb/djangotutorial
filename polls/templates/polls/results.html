@@ -49,26 +49,15 @@
                 </div>
               {% endif %}
 
-              <form action="{% url 'polls:vote' question.id %}" method="post">
-                {% csrf_token %}
-
-                <fieldset class="mb-3">
                   <legend class="visually-hidden">Choices</legend>
 
                   <div class="list-group">
                     {% for choice in question.choice_set.all %}
                       <label class="list-group-item d-flex gap-3 align-items-start">
-                        <input
-                          class="form-check-input mt-1"
-                          type="radio"
-                          name="choice"
-                          id="choice{{ forloop.counter }}"
-                          value="{{ choice.id }}"
-                          required
-                        />
-                        <div class="flex-grow-1">
-                          <div class="fw-semibold">{{ choice.choice_text }}</div>
-                        </div>
+                        <div class="fw-semibold">
+                            {{ choice.choice_text }}
+                        </div>  {{ choice.votes }} vote{{ choice.votes|pluralize }}
+
                       </label>
                     {% empty %}
                       <div class="list-group-item">
@@ -76,15 +65,12 @@
                       </div>
                     {% endfor %}
                   </div>
-                </fieldset>
 
                 <div class="d-flex flex-wrap gap-2">
-                  <button type="submit" class="btn btn-primary">Vote</button>
-                  <a class="btn btn-outline-primary" href="{% url 'polls:results' question.id %}">
-                    View results
+                  <a class="btn btn-outline-primary" href="{% url 'polls:detail' question.id %}">
+                    Vote Again for {{ question.question_text }}
                   </a>
                 </div>
-              </form>
             </div>
           </div>
 
